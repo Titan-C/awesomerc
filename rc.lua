@@ -50,20 +50,21 @@ end
 beautiful.init(awful.util.getdir("config") .. "/zenburn/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "termite"
-editor = os.getenv("EDITOR") or "nvim"
-editor_cmd = terminal .. " -e " .. editor
+local tools = {
+   terminal = "termite",
+   editor = os.getenv("EDITOR") or "nvim",
+   gui_editor = "emacs",
+   browser = "chromium",
+}
+tools.editor_cmd = tools.terminal .. " -e " .. tools.editor
 
--- user defined
-gui_editor = "emacs"
-browser = "chromium"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
 -- If you do not like this or do not have such a key,
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
-modkey = "Mod4"
+local modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 local layouts =
@@ -102,15 +103,15 @@ end
 
 -- {{{ Menu
 -- Create a laucher widget and a main menu
-myawesomemenu = {
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awesome.conffile },
+local myawesomemenu = {
+   { "manual", tools.terminal .. " -e man awesome" },
+   { "edit config", tools.editor_cmd .. " " .. awesome.conffile },
    { "restart", awesome.restart },
    { "quit", awesome.quit }
 }
 
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "open terminal", terminal }
+                                    { "open terminal", tools.terminal }
                                   }
                         })
 
@@ -118,19 +119,19 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
 
 -- Menubar configuration
-menubar.utils.terminal = terminal -- Set the terminal for applications that require it
+menubar.utils.terminal = tools.terminal -- Set the terminal for applications that require it
 -- }}}
 
 -- {{{ Wibox
 -- Create a textclock widget
-mytextclock = awful.widget.textclock()
+local mytextclock = awful.widget.textclock()
 local orglendar = require('orglendar')
 orglendar.files = { "/home/oscar/Dropbox/org/schedule.org",
                     "/home/oscar/Dropbox/org/todo.org" }
 orglendar.register(mytextclock)
 -- mpd widget
   local awesompd = require("awesompd/awesompd")
-  musicwidget = awesompd:create() -- Create awesompd widget
+  local musicwidget = awesompd:create() -- Create awesompd widget
   musicwidget.font = "Liberation Mono" -- Set widget font
   musicwidget.scrolling = true -- If true, the text in the widget will be scrolled
   musicwidget.output_size = 30 -- Set the size of widget in symbols
@@ -179,9 +180,9 @@ orglendar.register(mytextclock)
   musicwidget:run() -- After all configuration is done, run the widget
 
 -- Battery
-markup = lain.util.markup
-gray   = "#9E9C9A"
-batwidget = lain.widgets.bat({
+local markup = lain.util.markup
+local gray   = "#9E9C9A"
+local batwidget = lain.widgets.bat({
     battery = "BAT1",
     ac = "ACAD",
     settings = function()
@@ -195,10 +196,10 @@ batwidget = lain.widgets.bat({
 })
 
 -- Create a wibox for each screen and add it
-mywibox = {}
-mypromptbox = {}
-mylayoutbox = {}
-mytaglist = {}
+local mywibox = {}
+local mypromptbox = {}
+local mylayoutbox = {}
+local mytaglist = {}
 mytaglist.buttons = awful.util.table.join(
                     awful.button({ }, 1, awful.tag.viewonly),
                     awful.button({ modkey }, 1, awful.client.movetotag),
@@ -207,7 +208,7 @@ mytaglist.buttons = awful.util.table.join(
                     awful.button({ }, 4, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end),
                     awful.button({ }, 5, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end)
                     )
-mytasklist = {}
+local mytasklist = {}
 mytasklist.buttons = awful.util.table.join(
                      awful.button({ }, 1, function (c)
                                               if c == client.focus then
@@ -329,7 +330,7 @@ globalkeys = awful.util.table.join(
         end),
 
     -- Standard program
-    awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
+    awful.key({ modkey,           }, "Return", function () awful.util.spawn(tools.terminal) end),
     awful.key({ modkey, "Control" }, "l", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
@@ -349,8 +350,8 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "F12", function () awful.util.spawn("xscreensaver-command -lock") end),
 
     -- User programs
-    awful.key({ modkey }, "h", function () awful.util.spawn(browser) end),
-    awful.key({ modkey }, "v", function () awful.util.spawn(gui_editor) end),
+    awful.key({ modkey }, "h", function () awful.util.spawn(tools.browser) end),
+    awful.key({ modkey }, "v", function () awful.util.spawn(tools.gui_editor) end),
 
     -- Volume Control
     awful.key({ }, "XF86AudioRaiseVolume", function ()
@@ -552,9 +553,9 @@ client.connect_signal("focus", function(c) c.border_color = beautiful.border_foc
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 
-function run_once(cmd)
-  findme = cmd
-  firstspace = cmd:find(" ")
+local function run_once(cmd)
+  local findme = cmd
+  local firstspace = cmd:find(" ")
   if firstspace then
      findme = cmd:sub(0, firstspace-1)
   end
@@ -597,7 +598,7 @@ local function bat_notification()
   end
 end
 
-battimer = timer({timeout = 120})
+local battimer = timer({timeout = 120})
 battimer:connect_signal("timeout", bat_notification)
 battimer:start()
 
