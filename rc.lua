@@ -56,7 +56,7 @@ editor_cmd = terminal .. " -e " .. editor
 
 -- user defined
 gui_editor = "emacs"
-browser = "firefox"
+browser = "chromium"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
