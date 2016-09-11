@@ -47,7 +47,7 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init(os.getenv("HOME") .. "/.config/awesome/zenburn/theme.lua")
+beautiful.init(awful.util.getdir("config") .. "/zenburn/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "termite"
@@ -136,7 +136,8 @@ orglendar.register(mytextclock)
   musicwidget.output_size = 30 -- Set the size of widget in symbols
   musicwidget.update_interval = 10 -- Set the update interval in seconds
   -- Set the folder where icons are located (change username to your login name)
-  musicwidget.path_to_icons = "/home/oscar/.config/awesome/awesompd/icons"
+
+  musicwidget.path_to_icons = awful.util.getdir("config") .. "/awesompd/icons"
   -- Set the default music format for Jamendo streams. You can change
   -- this option on the fly in awesompd itself.
   -- possible formats: awesompd.FORMAT_MP3, awesompd.FORMAT_OGG
