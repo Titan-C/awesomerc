@@ -1,3 +1,6 @@
 [submodule "lain"]
 	path = lain
 	url = git@github.com:copycat-killer/lain.git
+[submodule "awesompd"]
+	path = awesompd
+	url = git@github.com:alexander-yakushev/awesompd.git
