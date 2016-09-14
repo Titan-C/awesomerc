@@ -5,6 +5,11 @@ This repo contains the config of my [[https://awesomewm.org][Awesome]] setup.
 
 * Awesome window manager
 ** Some dependencies
+This is for the graphical file manager and to mount external media
+#+BEGIN_SRC shell
+yaourt -Syua thunar gvfs
+#+END_SRC
+
 #+BEGIN_SRC shell
   yaourt -Syua termite terminus-font ttf-ubuntu-font-family
   yaourt -Syua compton
