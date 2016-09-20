@@ -15,6 +15,7 @@ local menubar = require("menubar")
 -- Setup laptop screen
 if "titan-arch-m" == io.popen("uname -n"):read() then
     awful.util.spawn_with_shell("xrandr --output eDP1 --mode 1920x1080 --output DP1 --mode 1920x1080 --above eDP1 --primary")
+    awful.util.spawn_with_shell("xrdb -merge <(echo \"Xft.dpi: 124\")")
     awful.util.spawn_with_shell("xinput --set-prop 18 \"Synaptics Two-Finger Scrolling\" 1 1")
 end
 
