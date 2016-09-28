@@ -334,6 +334,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(tools.terminal) end),
     awful.key({ modkey, "Control" }, "l", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
+    awful.key({ }, "XF86Sleep", function () awful.util.spawn("systemctl suspend") end),
 
     awful.key({modkey,            }, "F1",     function () awful.screen.focus(1) end),
     awful.key({modkey,            }, "F2",     function () awful.screen.focus(2) end),
