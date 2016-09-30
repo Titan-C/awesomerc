@@ -56,6 +56,8 @@ local tools = {
    editor = os.getenv("EDITOR") or "nvim",
    gui_editor = "emacs",
    browser = "chromium",
+   filemanager = "thunar",
+   video = "vlc",
 }
 tools.editor_cmd = tools.terminal .. " -e " .. tools.editor
 
@@ -354,6 +356,8 @@ globalkeys = awful.util.table.join(
     -- User programs
     awful.key({ modkey }, "h", function () awful.util.spawn(tools.browser) end),
     awful.key({ modkey }, "v", function () awful.util.spawn(tools.gui_editor) end),
+    awful.key({ modkey }, "i", function () awful.util.spawn(tools.filemanager) end),
+    awful.key({ modkey }, "y", function () awful.util.spawn(tools.video) end),
 
     -- Volume Control
     awful.key({ }, "XF86AudioRaiseVolume", function ()
