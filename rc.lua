@@ -16,7 +16,7 @@ local menubar = require("menubar")
 if "titan-arch-m" == io.popen("uname -n"):read() then
     awful.util.spawn_with_shell("xrandr --output eDP1 --mode 1920x1080 --output DP1 --mode 1920x1080 --above eDP1 --primary")
     awful.util.spawn_with_shell("xrdb -merge <(echo \"Xft.dpi: 124\")")
-    awful.util.spawn_with_shell("xinput --set-prop 18 \"Synaptics Two-Finger Scrolling\" 1 1")
+    awful.util.spawn_with_shell("xinput --set-prop \"SYN1B7E:01 06CB:2970 Touchpad\" \"Synaptics Two-Finger Scrolling\" 1 1")
 end
 
 awful.util.spawn_with_shell("$HOME/dev/helpful_scripts/autostart.sh")

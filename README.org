@@ -1,8 +1,21 @@
 #+TITLE: Awesome WM configuration
 #+AUTHOR: Óscar Nájera
 
-This repo contains the config of my [[https://awesomewm.org][Awesome]] setup.
+This repo contains the config of my [[https://awesomewm.org][Awesome]] setup. To download it use:
+#+BEGIN_SRC shell
+git clone --recursive git@github.com:Titan-C/awesomerc.git awesome
+#+END_SRC
 
+* Start with the terminal
+#+BEGIN_SRC shell
+sudo pacman -Syu zsh zsh-completions
+sudo pacman -Syu git
+sudo pacman -Syu emacs
+#+END_SRC
+Need the fonts to work on the terminal
+#+BEGIN_SRC shell
+  pacman -Syu powerline powerline-fonts
+#+END_SRC
 * Awesome window manager
 ** Some dependencies
 This is for the graphical file manager and to mount external media
