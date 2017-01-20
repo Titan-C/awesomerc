@@ -9,15 +9,6 @@ local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
-
--- Setup laptop screen
-if "titan-arch-m" == io.popen("uname -n"):read() then
-    awful.util.spawn_with_shell("xrandr --output eDP1 --mode 1920x1080 --output DP1 --mode 1920x1080 --above eDP1 --primary")
-    awful.util.spawn_with_shell("xrdb -merge <(echo \"Xft.dpi: 124\")")
-    awful.util.spawn_with_shell("xinput --set-prop \"SYN1B7E:01 06CB:2970 Touchpad\" \"Synaptics Two-Finger Scrolling\" 1 1")
-end
-
-awful.util.spawn_with_shell("$HOME/dev/helpful_scripts/autostart.sh")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
 
 -- {{{ Error handling
@@ -44,6 +35,16 @@ do
     end)
 end
 -- }}}
+
+-- Autostart script for keymaps
+awful.spawn.with_shell("$HOME/dev/helpful_scripts/autostart.sh")
+
+-- Setup laptop screen
+if "titan-arch-m" == io.popen("uname -n"):read() then
+    awful.spawn.with_shell("xrandr --output eDP1 --mode 1920x1080 --output DP1 --mode 1920x1080 --above eDP1 --primary")
+    awful.spawn.with_shell("xrdb -merge <(echo \"Xft.dpi: 124\")")
+    awful.spawn.with_shell("xinput --set-prop \"SYN1B7E:01 06CB:2970 Touchpad\" \"Synaptics Two-Finger Scrolling\" 1 1")
+end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
@@ -679,13 +680,13 @@ local function run_once(cmd)
   if firstspace then
      findme = cmd:sub(0, firstspace-1)
   end
-  awful.util.spawn_with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
+  awful.spawn.with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
 end
 
--- run_once("owncloud")
+run_once("owncloud")
 run_once("dropbox")
 run_once("compton")
-run_once("conky -q -d -c /home/oscar/dev/conky-seamod/conkyrc.lua")
+-- run_once("conky -q -d -c /home/oscar/dev/conky-seamod/conkyrc.lua")
 run_once("xscreensaver -no-splash")
 run_once("mpd")
 
