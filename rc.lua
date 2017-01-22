@@ -59,7 +59,6 @@ local tools = {
    filemanager = "thunar",
    video = "vlc",
 }
-tools.editor_cmd = tools.terminal .. " -e " .. tools.editor
 
 
 -- Default modkey.
@@ -67,7 +66,7 @@ tools.editor_cmd = tools.terminal .. " -e " .. tools.editor
 -- If you do not like this or do not have such a key,
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
-modkey = "Mod4"
+local modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
@@ -107,32 +106,29 @@ end
 
 -- {{{ Menu
 -- Create a launcher widget and a main menu
-myawesomemenu = {
+local myawesomemenu = {
    { "hotkeys", function() return false, hotkeys_popup.show_help end},
    { "manual", tools.terminal .. " -e man awesome" },
-   { "edit config", tools.editor_cmd .. " " .. awesome.conffile },
    { "restart", awesome.restart },
    { "quit", function() awesome.quit() end}
 }
 
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "open terminal", tools.terminal }
-                                  }
-                        })
+local mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
+                                   { "open terminal", tools.terminal } } })
 
-mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
-                                     menu = mymainmenu })
+local mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
+                                           menu = mymainmenu })
 
 -- Menubar configuration
 menubar.utils.terminal = tools.terminal -- Set the terminal for applications that require it
 -- }}}
 
 -- Keyboard map indicator and switcher
-mykeyboardlayout = awful.widget.keyboardlayout()
+local mykeyboardlayout = awful.widget.keyboardlayout()
 
 -- {{{ Wibar
 -- Create a textclock widget
-mytextclock = wibox.widget.textclock()
+local mytextclock = wibox.widget.textclock()
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = awful.util.table.join(
@@ -248,7 +244,7 @@ root.buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ Key bindings
-globalkeys = awful.util.table.join(
+local globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "j",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
@@ -390,7 +386,7 @@ globalkeys = awful.util.table.join(
               {description = "show the menubar", group = "launcher"})
 )
 
-clientkeys = awful.util.table.join(
+local clientkeys = awful.util.table.join(
     awful.key({ modkey,           }, "f",
         function (c)
             c.fullscreen = not c.fullscreen
@@ -472,13 +468,12 @@ for i = 1, 9 do
     )
 end
 
-clientbuttons = awful.util.table.join(
+local clientbuttons = awful.util.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize))
 
 -- Set keys
-musicwidget:append_global_keys()
 root.keys(globalkeys)
 -- }}}
 
