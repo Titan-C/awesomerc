@@ -6,6 +6,7 @@ require("awful.autofocus")
 local wibox = require("wibox")
 -- Theme handling library
 local beautiful = require("beautiful")
+local lain          = require("lain")
 -- Notification library
 local naughty = require("naughty")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
@@ -47,7 +48,7 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init(awful.util.get_themes_dir() .. "default/theme.lua")
+beautiful.init(awful.util.getdir("config") .. "/zenburn/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 local tools = {
@@ -126,49 +127,112 @@ local mykeyboardlayout = awful.widget.keyboardlayout()
 -- {{{ Wibar
 -- Create a textclock widget
 local mytextclock = wibox.widget.textclock()
+-- calendar
+lain.widgets.calendar.attach(mytextclock, {
+    notification_preset = {
+        font =  "DejaVuSansMono 12",
+        fg   = beautiful.fg_normal,
+        bg   = beautiful.bg_normal
+    }
+})
+
+-- MPD
+local mpdicon = wibox.widget.imagebox(beautiful.widget_music)
+mpdicon:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.spawn.with_shell("gvim") end)))
+
+local mpdwidget = lain.widgets.mpd({
+    settings = function()
+        if mpd_now.state == "play" then
+            artist = " " .. mpd_now.artist .. " "
+            title  = mpd_now.title  .. " "
+            mpdicon:set_image(beautiful.widget_music_on)
+            widget:set_markup(markup("#EA6F81", artist) .. title)
+        elseif mpd_now.state == "pause" then
+            artist = " mpd "
+            title  = "paused "
+        else
+            artist = ""
+            title  = ""
+            mpdicon:set_image(beautiful.widget_music)
+        end
+        widget:set_markup(artist .. title)
+    end
+})
+
+-- Battery
+local baticon = wibox.widget.imagebox(beautiful.widget_battery)
+local batwidget = lain.widgets.bat({
+    battery = "BAT1",
+    ac = "ACAD",
+    settings = function()
+        if bat_now.status ~= "N/A" then
+            if bat_now.ac_status == 1 then
+                widget:set_markup(" AC ")
+                baticon:set_image(beautiful.widget_ac)
+                return
+            elseif not bat_now.perc and tonumber(bat_now.perc) <= 5 then
+                baticon:set_image(beautiful.widget_battery_empty)
+            elseif not bat_now.perc and tonumber(bat_now.perc) <= 15 then
+                baticon:set_image(beautiful.widget_battery_low)
+            else
+                baticon:set_image(beautiful.widget_battery)
+            end
+            widget:set_markup(" " .. bat_now.perc .. "% ")
+        else
+            baticon:set_image(beautiful.widget_ac)
+        end
+    end
+})
+
+-- Separators
+local separators = lain.util.separators
+local spr     = wibox.widget.textbox(' ')
+local arrl_dl = separators.arrow_left(beautiful.bg_focus, "alpha")
+local arrl_ld = separators.arrow_left("alpha", beautiful.bg_focus)
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = awful.util.table.join(
-                    awful.button({ }, 1, function(t) t:view_only() end),
-                    awful.button({ modkey }, 1, function(t)
-                                              if client.focus then
-                                                  client.focus:move_to_tag(t)
-                                              end
-                                          end),
-                    awful.button({ }, 3, awful.tag.viewtoggle),
-                    awful.button({ modkey }, 3, function(t)
-                                              if client.focus then
-                                                  client.focus:toggle_tag(t)
-                                              end
-                                          end),
-                    awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
-                    awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
-                )
+   awful.button({ }, 1, function(t) t:view_only() end),
+   awful.button({ modkey }, 1, function(t)
+           if client.focus then
+               client.focus:move_to_tag(t)
+           end
+       end),
+   awful.button({ }, 3, awful.tag.viewtoggle),
+   awful.button({ modkey }, 3, function(t)
+           if client.focus then
+               client.focus:toggle_tag(t)
+           end
+       end),
+   awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
+   awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
+)
 
 local tasklist_buttons = awful.util.table.join(
-                     awful.button({ }, 1, function (c)
-                                              if c == client.focus then
-                                                  c.minimized = true
-                                              else
-                                                  -- Without this, the following
-                                                  -- :isvisible() makes no sense
-                                                  c.minimized = false
-                                                  if not c:isvisible() and c.first_tag then
-                                                      c.first_tag:view_only()
-                                                  end
-                                                  -- This will also un-minimize
-                                                  -- the client, if needed
-                                                  client.focus = c
-                                                  c:raise()
-                                              end
-                                          end),
-                     awful.button({ }, 3, client_menu_toggle_fn()),
-                     awful.button({ }, 4, function ()
-                                              awful.client.focus.byidx(1)
-                                          end),
-                     awful.button({ }, 5, function ()
-                                              awful.client.focus.byidx(-1)
-                                          end))
+   awful.button({ }, 1,
+      function (c)
+          if c == client.focus then
+              c.minimized = true
+          else
+              -- Without this, the following
+              -- :isvisible() makes no sense
+              c.minimized = false
+              if not c:isvisible() and c.first_tag then
+                  c.first_tag:view_only()
+              end
+              -- This will also un-minimize
+              -- the client, if needed
+              client.focus = c
+              c:raise()
+          end
+      end),
+    awful.button({ }, 3, client_menu_toggle_fn()),
+    awful.button({ }, 4, function ()
+                             awful.client.focus.byidx(1)
+                         end),
+    awful.button({ }, 5, function ()
+                             awful.client.focus.byidx(-1)
+                         end))
 
 local function set_wallpaper(s)
     -- Wallpaper
@@ -224,9 +288,18 @@ awful.screen.connect_for_each_screen(function(s)
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             mykeyboardlayout,
+            arrl_ld,
+            wibox.container.background(mpdicon, beautiful.bg_focus),
+            wibox.container.background(mpdwidget, beautiful.bg_focus),
+            arrl_dl,
             wibox.widget.systray(),
+            arrl_ld,
+            wibox.container.background(baticon, beautiful.bg_focus),
+            wibox.container.background(batwidget, beautiful.bg_focus),
+            arrl_dl,
             mytextclock,
-            s.mylayoutbox,
+            arrl_ld,
+            wibox.container.background(s.mylayoutbox, beautiful.bg_focus),
         },
     }
 end)
@@ -515,7 +588,7 @@ awful.rules.rules = {
 
     -- Add titlebars to normal clients and dialogs
     { rule_any = {type = { "normal", "dialog" }
-      }, properties = { titlebars_enabled = true }
+      }, properties = { titlebars_enabled = false }
     },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.

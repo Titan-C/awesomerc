@@ -124,4 +124,12 @@ theme.titlebar_maximized_button_normal_inactive = themes_dir .. "/titlebar/maxim
 -- }}}
 -- }}}
 
+theme.widget_ac             = themes_dir .. "/icons/ac.png"
+theme.widget_battery        = themes_dir .. "/icons/battery.png"
+theme.widget_battery_low    = themes_dir .. "/icons/battery_low.png"
+theme.widget_battery_empty  = themes_dir .. "/icons/battery_empty.png"
+
+theme.widget_music          = themes_dir .. "/icons/note.png"
+theme.widget_music_on       = themes_dir .. "/icons/note_on.png"
+
 return theme
