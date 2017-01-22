@@ -8,7 +8,6 @@ local wibox = require("wibox")
 local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
-local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
 
 -- {{{ Error handling
@@ -119,8 +118,6 @@ local mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.
 local mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                            menu = mymainmenu })
 
--- Menubar configuration
-menubar.utils.terminal = tools.terminal -- Set the terminal for applications that require it
 -- }}}
 
 -- Keyboard map indicator and switcher
@@ -380,10 +377,7 @@ local globalkeys = awful.util.table.join(
                     history_path = awful.util.get_cache_dir() .. "/history_eval"
                   }
               end,
-              {description = "lua execute prompt", group = "awesome"}),
-    -- Menubar
-    awful.key({ modkey }, "p", function() menubar.show() end,
-              {description = "show the menubar", group = "launcher"})
+              {description = "lua execute prompt", group = "awesome"})
 )
 
 local clientkeys = awful.util.table.join(
