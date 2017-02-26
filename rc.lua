@@ -76,13 +76,13 @@ awful.layout.layouts = {
     awful.layout.suit.tile.top,
     awful.layout.suit.fair,
     awful.layout.suit.fair.horizontal,
-    awful.layout.suit.spiral,
-    awful.layout.suit.spiral.dwindle,
-    awful.layout.suit.max,
+    -- awful.layout.suit.spiral,
+    -- awful.layout.suit.spiral.dwindle,
+    -- awful.layout.suit.max,
     awful.layout.suit.max.fullscreen,
-    awful.layout.suit.magnifier,
+    -- awful.layout.suit.magnifier,
     awful.layout.suit.floating,
-    awful.layout.suit.corner.nw,
+    -- awful.layout.suit.corner.nw,
     -- awful.layout.suit.corner.ne,
     -- awful.layout.suit.corner.sw,
     -- awful.layout.suit.corner.se,
@@ -121,15 +121,13 @@ local mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
 
 -- }}}
 
--- Keyboard map indicator and switcher
-local mykeyboardlayout = awful.widget.keyboardlayout()
-
 -- {{{ Wibar
 -- Create a textclock widget
 local mytextclock = wibox.widget.textclock()
 -- calendar
-lain.widgets.calendar.attach(mytextclock, {
-    notification_preset = {
+lain.widget.calendar({
+      attach_to = { mytextclock },
+      notification_preset = {
         font =  "DejaVuSansMono 12",
         fg   = beautiful.fg_normal,
         bg   = beautiful.bg_normal
@@ -140,13 +138,12 @@ lain.widgets.calendar.attach(mytextclock, {
 local mpdicon = wibox.widget.imagebox(beautiful.widget_music)
 mpdicon:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.spawn.with_shell("gvim") end)))
 
-local mpdwidget = lain.widgets.mpd({
+local mpdwidget = lain.widget.mpd({
     settings = function()
         if mpd_now.state == "play" then
             artist = " " .. mpd_now.artist .. " "
             title  = mpd_now.title  .. " "
             mpdicon:set_image(beautiful.widget_music_on)
-            widget:set_markup(markup("#EA6F81", artist) .. title)
         elseif mpd_now.state == "pause" then
             artist = " mpd "
             title  = "paused "
@@ -161,7 +158,7 @@ local mpdwidget = lain.widgets.mpd({
 
 -- Battery
 local baticon = wibox.widget.imagebox(beautiful.widget_battery)
-local batwidget = lain.widgets.bat({
+local batwidget = lain.widget.bat({
     battery = "BAT1",
     ac = "ACAD",
     settings = function()
@@ -287,15 +284,14 @@ awful.screen.connect_for_each_screen(function(s)
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            mykeyboardlayout,
             arrl_ld,
             wibox.container.background(mpdicon, beautiful.bg_focus),
-            wibox.container.background(mpdwidget, beautiful.bg_focus),
+            wibox.container.background(mpdwidget.widget, beautiful.bg_focus),
             arrl_dl,
             wibox.widget.systray(),
             arrl_ld,
             wibox.container.background(baticon, beautiful.bg_focus),
-            wibox.container.background(batwidget, beautiful.bg_focus),
+            wibox.container.background(batwidget.widget, beautiful.bg_focus),
             arrl_dl,
             mytextclock,
             arrl_ld,
@@ -594,6 +590,7 @@ awful.rules.rules = {
     -- Set Firefox to always map on the tag named "2" on screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { screen = 1, tag = "2" } },
+    {rule = {instance = "display"}, properties= {floating=true}},
 }
 -- }}}
 
