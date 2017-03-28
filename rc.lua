@@ -251,7 +251,7 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
+    awful.tag({ "", "", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -588,8 +588,8 @@ awful.rules.rules = {
     },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { screen = 1, tag = "2" } },
+    { rule = { class = "Firefox" },
+      properties = { screen = 1, tag = "" } },
     {rule = {instance = "display"}, properties= {floating=true}},
 }
 -- }}}
@@ -675,6 +675,7 @@ end
 run_once("owncloud")
 run_once("dropbox")
 run_once("compton")
+run_once("megasync")
 -- run_once("conky -q -d -c /home/oscar/dev/conky-seamod/conkyrc.lua")
 run_once("xscreensaver -no-splash")
 run_once("mpd")

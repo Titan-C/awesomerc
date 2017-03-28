@@ -19,6 +19,7 @@ Need the fonts to work on the terminal
 * Awesome window manager
 ** Some dependencies
 This is for the graphical file manager and to mount external media
+
 #+BEGIN_SRC shell
 yaourt -Syua thunar gvfs
 yaourt -Syua gvfs-mtp # for android
@@ -26,6 +27,7 @@ yaourt -Syua gvfs-mtp # for android
 
 #+BEGIN_SRC shell
   yaourt -Syua termite terminus-font ttf-ubuntu-font-family
+  yaourt -Syua otf-fontawesome
   yaourt -Syua compton
   yaourt -Syua conky
   yaourt -Syua network-manager-applet
