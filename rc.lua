@@ -134,27 +134,6 @@ lain.widget.calendar({
     }
 })
 
--- MPD
-local mpdicon = wibox.widget.imagebox(beautiful.widget_music)
-mpdicon:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.spawn.with_shell("gvim") end)))
-
-local mpdwidget = lain.widget.mpd({
-    settings = function()
-        if mpd_now.state == "play" then
-            artist = " " .. mpd_now.artist .. " "
-            title  = mpd_now.title  .. " "
-            mpdicon:set_image(beautiful.widget_music_on)
-        elseif mpd_now.state == "pause" then
-            artist = " mpd "
-            title  = "paused "
-        else
-            artist = ""
-            title  = ""
-            mpdicon:set_image(beautiful.widget_music)
-        end
-        widget:set_markup(artist .. title)
-    end
-})
 
 -- Battery
 local baticon = wibox.widget.imagebox(beautiful.widget_battery)
@@ -285,8 +264,8 @@ awful.screen.connect_for_each_screen(function(s)
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             arrl_ld,
-            wibox.container.background(mpdicon, beautiful.bg_focus),
-            wibox.container.background(mpdwidget.widget, beautiful.bg_focus),
+            wibox.container.background(beautiful.mpd.widget, beautiful.bg_focus),
+            wibox.container.background(beautiful.mpdicon, beautiful.bg_focus),
             arrl_dl,
             wibox.widget.systray(),
             arrl_ld,

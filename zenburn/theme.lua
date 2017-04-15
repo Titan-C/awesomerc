@@ -7,7 +7,7 @@
 --  * http://awesome.naquadah.org/wiki/Nice_Icons
 local util = require('awful.util')
 -- {{{ Main
-theme = {}
+local theme = {}
 themes_dir = util.getdir("config") .. "/zenburn"
 theme.wallpaper = themes_dir .. "/wallpapers/landscape.jpg"
 -- }}}
@@ -131,5 +131,36 @@ theme.widget_battery_empty  = themes_dir .. "/icons/battery_empty.png"
 
 theme.widget_music          = themes_dir .. "/icons/note.png"
 theme.widget_music_on       = themes_dir .. "/icons/note_on.png"
+
+local lain  = require("lain")
+local wibox = require("wibox")
+local awful = require("awful")
+
+local markup = lain.util.markup
+
+-- MPD
+theme.mpdicon = wibox.widget.imagebox(theme.widget_music)
+theme.mpdicon:buttons(awful.util.table.join(
+    awful.button({ }, 1, function () awful.spawn.with_shell("mpc next") end),
+    awful.button({ }, 3, function () awful.spawn.with_shell("mpc toggle") end)))
+
+theme.mpd = lain.widget.mpd({
+    settings = function()
+        if mpd_now.state == "play" then
+            artist = " " .. mpd_now.artist .. " "
+            title  = mpd_now.title  .. " "
+            theme.mpdicon:set_image(theme.widget_music_on)
+            widget:set_markup(markup.font(theme.font, markup("#FF8466", artist) .. " " .. title))
+        elseif mpd_now.state == "pause" then
+            artist = " mpd "
+            title  = "paused "
+        else
+            artist = ""
+            title  = ""
+            theme.mpdicon:set_image(theme.widget_music)
+        end
+        -- widget:set_markup(artist .. title)
+    end
+})
 
 return theme
