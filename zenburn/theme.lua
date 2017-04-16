@@ -8,7 +8,7 @@
 local util = require('awful.util')
 -- {{{ Main
 local theme = {}
-themes_dir = util.getdir("config") .. "/zenburn"
+local themes_dir = util.getdir("config") .. "/zenburn"
 theme.wallpaper = themes_dir .. "/wallpapers/landscape.jpg"
 -- }}}
 
@@ -132,11 +132,26 @@ theme.widget_battery_empty  = themes_dir .. "/icons/battery_empty.png"
 theme.widget_music          = themes_dir .. "/icons/note.png"
 theme.widget_music_on       = themes_dir .. "/icons/note_on.png"
 
+local gears = require("gears")
 local lain  = require("lain")
 local wibox = require("wibox")
 local awful = require("awful")
 
 local markup = lain.util.markup
+
+-- Create a textclock widget
+local mytextclock = wibox.widget.textclock()
+--local mytextclock = wibox.widget.textclock(markup("#7788af", "%A %d %B ") .. markup("#535f7a", ">") .. markup("#de5e1e", " %H:%M "))
+mytextclock.font = theme.font
+-- calendar
+lain.widget.calendar({
+      attach_to = { mytextclock },
+      notification_preset = {
+        font = theme.font,
+        fg   = theme.fg_normal,
+        bg   = theme.bg_normal
+    }
+})
 
 -- MPD
 theme.mpdicon = wibox.widget.imagebox(theme.widget_music)
@@ -150,7 +165,6 @@ theme.mpd = lain.widget.mpd({
             artist = " " .. mpd_now.artist .. " "
             title  = mpd_now.title  .. " "
             theme.mpdicon:set_image(theme.widget_music_on)
-            widget:set_markup(markup.font(theme.font, markup("#FF8466", artist) .. " " .. title))
         elseif mpd_now.state == "pause" then
             artist = " mpd "
             title  = "paused "
@@ -159,8 +173,103 @@ theme.mpd = lain.widget.mpd({
             title  = ""
             theme.mpdicon:set_image(theme.widget_music)
         end
-        -- widget:set_markup(artist .. title)
+        widget:set_markup(markup.font(theme.font, markup("#FF8466", artist) .. " " .. title))
     end
 })
+
+-- Battery
+local baticon = wibox.widget.imagebox(theme.widget_battery)
+local batwidget = lain.widget.bat({
+    battery = "BAT1",
+    ac = "ACAD",
+    settings = function()
+        if bat_now.status ~= "N/A" then
+            if bat_now.ac_status == 1 then
+               widget:set_markup(markup.font(theme.font, " AC "))
+                baticon:set_image(theme.widget_ac)
+                return
+            elseif not bat_now.perc and tonumber(bat_now.perc) <= 5 then
+                baticon:set_image(theme.widget_battery_empty)
+            elseif not bat_now.perc and tonumber(bat_now.perc) <= 15 then
+                baticon:set_image(theme.widget_battery_low)
+            else
+                baticon:set_image(theme.widget_battery)
+            end
+            widget:set_markup(markup.font(theme.font, " " .. bat_now.perc .. "% "))
+        else
+            baticon:set_image(theme.widget_ac)
+        end
+    end
+})
+
+function theme.set_wallpaper(s)
+    -- Wallpaper
+    if theme.wallpaper then
+        local wallpaper = theme.wallpaper
+        -- If wallpaper is a function, call it with the screen
+        if type(wallpaper) == "function" then
+            wallpaper = wallpaper(s)
+        end
+        gears.wallpaper.maximized(wallpaper, s, true)
+    end
+end
+
+-- Separators
+local separators = lain.util.separators
+local arrl_dl = separators.arrow_left(theme.bg_focus, "alpha")
+local arrl_ld = separators.arrow_left("alpha", theme.bg_focus)
+
+function theme.at_screen_connect(s)
+    -- Wallpaper
+    theme.set_wallpaper(s)
+
+    -- Each screen has its own tag table.
+    awful.tag({ "", "", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
+
+    -- Create a promptbox for each screen
+    s.mypromptbox = awful.widget.prompt()
+    -- Create an imagebox widget which will contains an icon indicating which layout we're using.
+    -- We need one layoutbox per screen.
+    s.mylayoutbox = awful.widget.layoutbox(s)
+    s.mylayoutbox:buttons(awful.util.table.join(
+                           awful.button({ }, 1, function () awful.layout.inc( 1) end),
+                           awful.button({ }, 3, function () awful.layout.inc(-1) end),
+                           awful.button({ }, 4, function () awful.layout.inc( 1) end),
+                           awful.button({ }, 5, function () awful.layout.inc(-1) end)))
+    -- Create a taglist widget
+    s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, awful.util.taglist_buttons)
+
+    -- Create a tasklist widget
+    s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, awful.util.tasklist_buttons)
+
+    -- Create the wibox
+    s.mywibox = awful.wibar({ position = "top", screen = s })
+
+    -- Add widgets to the wibox
+    s.mywibox:setup {
+        layout = wibox.layout.align.horizontal,
+        { -- Left widgets
+            layout = wibox.layout.fixed.horizontal,
+            s.mytaglist,
+            s.mypromptbox,
+        },
+        s.mytasklist, -- Middle widget
+        { -- Right widgets
+            layout = wibox.layout.fixed.horizontal,
+            arrl_ld,
+            wibox.container.background(theme.mpd.widget, theme.bg_focus),
+            wibox.container.background(theme.mpdicon, theme.bg_focus),
+            arrl_dl,
+            wibox.widget.systray(),
+            arrl_ld,
+            wibox.container.background(baticon, theme.bg_focus),
+            wibox.container.background(batwidget.widget, theme.bg_focus),
+            arrl_dl,
+            mytextclock,
+            arrl_ld,
+            wibox.container.background(s.mylayoutbox, theme.bg_focus),
+        },
+    }
+end
 
 return theme

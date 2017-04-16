@@ -1,12 +1,10 @@
 -- Standard awesome library
-local gears = require("gears")
 local awful = require("awful")
 require("awful.autofocus")
 -- Widget and layout library
 local wibox = require("wibox")
 -- Theme handling library
 local beautiful = require("beautiful")
-local lain          = require("lain")
 -- Notification library
 local naughty = require("naughty")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
@@ -47,8 +45,6 @@ if "titan-arch-m" == io.popen("uname -n"):read() then
 end
 
 -- {{{ Variable definitions
--- Themes define colours, icons, font and wallpapers.
-beautiful.init(awful.util.getdir("config") .. "/zenburn/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 local tools = {
@@ -122,52 +118,9 @@ local mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
 -- }}}
 
 -- {{{ Wibar
--- Create a textclock widget
-local mytextclock = wibox.widget.textclock()
--- calendar
-lain.widget.calendar({
-      attach_to = { mytextclock },
-      notification_preset = {
-        font =  "DejaVuSansMono 12",
-        fg   = beautiful.fg_normal,
-        bg   = beautiful.bg_normal
-    }
-})
-
-
--- Battery
-local baticon = wibox.widget.imagebox(beautiful.widget_battery)
-local batwidget = lain.widget.bat({
-    battery = "BAT1",
-    ac = "ACAD",
-    settings = function()
-        if bat_now.status ~= "N/A" then
-            if bat_now.ac_status == 1 then
-                widget:set_markup(" AC ")
-                baticon:set_image(beautiful.widget_ac)
-                return
-            elseif not bat_now.perc and tonumber(bat_now.perc) <= 5 then
-                baticon:set_image(beautiful.widget_battery_empty)
-            elseif not bat_now.perc and tonumber(bat_now.perc) <= 15 then
-                baticon:set_image(beautiful.widget_battery_low)
-            else
-                baticon:set_image(beautiful.widget_battery)
-            end
-            widget:set_markup(" " .. bat_now.perc .. "% ")
-        else
-            baticon:set_image(beautiful.widget_ac)
-        end
-    end
-})
-
--- Separators
-local separators = lain.util.separators
-local spr     = wibox.widget.textbox(' ')
-local arrl_dl = separators.arrow_left(beautiful.bg_focus, "alpha")
-local arrl_ld = separators.arrow_left("alpha", beautiful.bg_focus)
 
 -- Create a wibox for each screen and add it
-local taglist_buttons = awful.util.table.join(
+awful.util.taglist_buttons = awful.util.table.join(
    awful.button({ }, 1, function(t) t:view_only() end),
    awful.button({ modkey }, 1, function(t)
            if client.focus then
@@ -184,7 +137,7 @@ local taglist_buttons = awful.util.table.join(
    awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
 )
 
-local tasklist_buttons = awful.util.table.join(
+awful.util.tasklist_buttons = awful.util.table.join(
    awful.button({ }, 1,
       function (c)
           if c == client.focus then
@@ -210,74 +163,13 @@ local tasklist_buttons = awful.util.table.join(
                              awful.client.focus.byidx(-1)
                          end))
 
-local function set_wallpaper(s)
-    -- Wallpaper
-    if beautiful.wallpaper then
-        local wallpaper = beautiful.wallpaper
-        -- If wallpaper is a function, call it with the screen
-        if type(wallpaper) == "function" then
-            wallpaper = wallpaper(s)
-        end
-        gears.wallpaper.maximized(wallpaper, s, true)
-    end
-end
+-- Themes define colours, icons, font and wallpapers.
+beautiful.init(awful.util.getdir("config") .. "/zenburn/theme.lua")
 
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
-screen.connect_signal("property::geometry", set_wallpaper)
+screen.connect_signal("property::geometry", beautiful.set_wallpaper)
 
-awful.screen.connect_for_each_screen(function(s)
-    -- Wallpaper
-    set_wallpaper(s)
-
-    -- Each screen has its own tag table.
-    awful.tag({ "", "", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
-
-    -- Create a promptbox for each screen
-    s.mypromptbox = awful.widget.prompt()
-    -- Create an imagebox widget which will contains an icon indicating which layout we're using.
-    -- We need one layoutbox per screen.
-    s.mylayoutbox = awful.widget.layoutbox(s)
-    s.mylayoutbox:buttons(awful.util.table.join(
-                           awful.button({ }, 1, function () awful.layout.inc( 1) end),
-                           awful.button({ }, 3, function () awful.layout.inc(-1) end),
-                           awful.button({ }, 4, function () awful.layout.inc( 1) end),
-                           awful.button({ }, 5, function () awful.layout.inc(-1) end)))
-    -- Create a taglist widget
-    s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglist_buttons)
-
-    -- Create a tasklist widget
-    s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
-
-    -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s })
-
-    -- Add widgets to the wibox
-    s.mywibox:setup {
-        layout = wibox.layout.align.horizontal,
-        { -- Left widgets
-            layout = wibox.layout.fixed.horizontal,
-            mylauncher,
-            s.mytaglist,
-            s.mypromptbox,
-        },
-        s.mytasklist, -- Middle widget
-        { -- Right widgets
-            layout = wibox.layout.fixed.horizontal,
-            arrl_ld,
-            wibox.container.background(beautiful.mpd.widget, beautiful.bg_focus),
-            wibox.container.background(beautiful.mpdicon, beautiful.bg_focus),
-            arrl_dl,
-            wibox.widget.systray(),
-            arrl_ld,
-            wibox.container.background(baticon, beautiful.bg_focus),
-            wibox.container.background(batwidget.widget, beautiful.bg_focus),
-            arrl_dl,
-            mytextclock,
-            arrl_ld,
-            wibox.container.background(s.mylayoutbox, beautiful.bg_focus),
-        },
-    }
-end)
+awful.screen.connect_for_each_screen(beautiful.at_screen_connect)
 -- }}}
 
 -- {{{ Mouse bindings
