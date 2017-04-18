@@ -43,6 +43,10 @@ if "titan-arch-m" == io.popen("uname -n"):read() then
     awful.spawn.with_shell("xrdb -merge <(echo \"Xft.dpi: 124\")")
     awful.spawn.with_shell("xinput --set-prop \"SYN1B7E:01 06CB:2970 Touchpad\" \"Synaptics Two-Finger Scrolling\" 1 1")
 end
+if "theo-fl-7113" == io.popen("uname -n"):read() then
+    awful.spawn.with_shell("xrandr --primary --output DP-2 --mode 1920x1080 --output DP-3 --mode 1680x1050 --left-of DP-2")
+    awful.spawn.with_shell("xrdb -merge <(echo \"Xft.dpi: 124\")")
+end
 
 -- {{{ Variable definitions
 
@@ -51,10 +55,15 @@ local tools = {
    terminal = "termite",
    editor = os.getenv("EDITOR") or "nvim",
    gui_editor = "emacs",
-   browser = "chromium",
+   browser_ch = "chromium --incognito",
+   browser_fi = "firefox",
    filemanager = "thunar",
    video = "vlc",
 }
+
+if "theo-fl-7113" == io.popen("uname -n"):read() then
+tools.browser_ch = tools.browser_ch .. " --proxy-pac-url=http://proxy.scd.u-psud.fr:8000/proxy.pac"
+end
 
 
 -- Default modkey.
@@ -182,7 +191,7 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 local globalkeys = awful.util.table.join(
-    awful.key({ modkey,           }, "j",      hotkeys_popup.show_help,
+    awful.key({ modkey,           }, "k",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
               {description = "view previous", group = "tag"}),
@@ -276,8 +285,10 @@ local globalkeys = awful.util.table.join(
        {description = "Lock screen", group = "awesome"}),
 
     -- User programs
-    awful.key({ modkey }, "h", function () awful.spawn(tools.browser) end,
-              {description = "Open Browser", group = "launcher"}),
+    awful.key({ modkey }, "h", function () awful.spawn(tools.browser_fi) end,
+              {description = "Open Firefox Browser", group = "launcher"}),
+    awful.key({ modkey }, "j", function () awful.spawn(tools.browser_ch) end,
+              {description = "Open Chromium Browser", group = "launcher"}),
     awful.key({ modkey }, "v", function () awful.spawn(tools.gui_editor) end,
               {description = "Open Editor", group = "launcher"}),
     awful.key({ modkey }, "i", function () awful.spawn(tools.filemanager) end,
