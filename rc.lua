@@ -44,8 +44,8 @@ if "titan-arch-m" == io.popen("uname -n"):read() then
     awful.spawn.with_shell("xinput --set-prop \"SYN1B7E:01 06CB:2970 Touchpad\" \"Synaptics Two-Finger Scrolling\" 1 1")
 end
 if "theo-fl-7113" == io.popen("uname -n"):read() then
-    awful.spawn.with_shell("xrandr --primary --output DP-2 --mode 1920x1080 --output DP-3 --mode 1680x1050 --left-of DP-2")
-    awful.spawn.with_shell("xrdb -merge <(echo \"Xft.dpi: 124\")")
+    awful.spawn.with_shell("xrandr --output DP-2 --primary --mode 1920x1080 --output DP-3 --right-of DP-2 --mode 1680x1050")
+    awful.spawn.with_shell("xrdb -merge <(echo \"Xft.dpi: 134\")")
 end
 
 -- {{{ Variable definitions
