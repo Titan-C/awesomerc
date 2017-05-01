@@ -13,7 +13,7 @@ theme.wallpaper = themes_dir .. "/wallpapers/landscape.jpg"
 -- }}}
 
 -- {{{ Styles
-theme.font      = "DejaVuSansMono 12"
+theme.font      = "DejaVuSansMono 14"
 
 -- {{{ Colors
 theme.fg_normal  = "#DCDCCC"
@@ -224,7 +224,7 @@ function theme.at_screen_connect(s)
     theme.set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ "", "", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
+    awful.tag({ "", "", "", "", "", ""}, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
