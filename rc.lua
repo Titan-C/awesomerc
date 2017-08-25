@@ -59,6 +59,7 @@ local tools = {
    browser_fi = "firefox",
    filemanager = "thunar",
    video = "vlc",
+   pass = "passmenu",
 }
 
 if "theo-fl-7113" == io.popen("uname -n"):read() then
@@ -295,6 +296,8 @@ local globalkeys = awful.util.table.join(
               {description = "Open File Manager", group = "launcher"}),
     awful.key({ modkey }, "y", function () awful.spawn(tools.video) end,
               {description = "Open Video Player", group = "launcher"}),
+    awful.key({ modkey }, ".", function () awful.spawn(tools.pass) end,
+              {description = "Open Pass", group = "launcher"}),
 
     -- Volume Control
     awful.key({ }, "XF86AudioRaiseVolume", function ()
