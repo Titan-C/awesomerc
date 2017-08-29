@@ -217,9 +217,9 @@ local globalkeys = awful.util.table.join(
               {description = "show main menu", group = "awesome"}),
 
     -- Layout manipulation
-    awful.key({ modkey, "Shift"   }, "r", function () awful.client.swap.byidx(  1)    end,
+    awful.key({ modkey, "Shift"   }, "t", function () awful.client.swap.byidx(  1)    end,
               {description = "swap with next client by index", group = "client"}),
-    awful.key({ modkey, "Shift"   }, "t", function () awful.client.swap.byidx( -1)    end,
+    awful.key({ modkey, "Shift"   }, "r", function () awful.client.swap.byidx( -1)    end,
               {description = "swap with previous client by index", group = "client"}),
     awful.key({ modkey, "Control" }, "r", function () awful.screen.focus_relative( 1) end,
               {description = "focus the next screen", group = "screen"}),
