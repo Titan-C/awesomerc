@@ -454,7 +454,7 @@ awful.rules.rules = {
           "MessageWin",  -- kalarm.
           "Sxiv",
           "Wpa_gui",
-          "pinentry",
+          "Pinentry",
           "veromix",
           "xtightvncviewer"},
 
