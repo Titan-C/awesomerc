@@ -54,7 +54,7 @@ end
 local tools = {
    terminal = "termite",
    editor = os.getenv("EDITOR") or "nvim",
-   gui_editor = "emacs",
+   gui_editor = "emacsclient -a \"\" -c",
    browser_ch = "chromium --incognito",
    browser_fi = "firefox",
    filemanager = "thunar",
