@@ -473,8 +473,8 @@ awful.rules.rules = {
     },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
-    { rule = { class = "Firefox" },
-      properties = { screen = 1, tag = "" } },
+    -- This fixed tag is more anoying than helpful
+    -- { rule = { class = "Firefox" }, properties = { screen = 1, tag = "" } },
     {rule = {instance = "display"}, properties= {floating=true}},
 }
 -- }}}
