@@ -38,14 +38,10 @@ end
 awful.spawn.with_shell("$HOME/dev/helpful_scripts/autostart.sh")
 
 -- Setup laptop screen
-if "titan-arch-m" == io.popen("uname -n"):read() then
+if "titanroam" == io.popen("uname -n"):read() then
     awful.spawn.with_shell("xrandr --output eDP1 --mode 1920x1080 --output DP1 --mode 1920x1080 --above eDP1 --primary")
     awful.spawn.with_shell("xrdb -merge <(echo \"Xft.dpi: 124\")")
     awful.spawn.with_shell("xinput --set-prop \"SYN1B7E:01 06CB:2970 Touchpad\" \"Synaptics Two-Finger Scrolling\" 1 1")
-end
-if "theo-fl-7113" == io.popen("uname -n"):read() then
-    awful.spawn.with_shell("xrandr --output DP-2 --primary --mode 1920x1080 --output DP-3 --right-of DP-2 --mode 1680x1050")
-    awful.spawn.with_shell("xrdb -merge <(echo \"Xft.dpi: 134\")")
 end
 
 -- {{{ Variable definitions
@@ -564,7 +560,8 @@ run_once("megasync")
 -- run_once("conky -q -d -c /home/oscar/dev/conky-seamod/conkyrc.lua")
 run_once("xscreensaver -no-splash")
 run_once("mpd")
+run_once("redshift-gtk")
 
-if "titan-arch-m" == io.popen("uname -n"):read() then
+if "titanroam" == io.popen("uname -n"):read() then
 run_once("nm-applet")
 end
