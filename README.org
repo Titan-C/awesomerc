@@ -27,7 +27,7 @@ yaourt -Syua gvfs-mtp # for android
 
 #+BEGIN_SRC shell
   yaourt -Syua termite terminus-font ttf-ubuntu-font-family
-  yaourt -Syua otf-fontawesome
+  pacman -Syu otf-font-awesome ttf-font-awesome
   yaourt -Syua compton
   yaourt -Syua conky
   yaourt -Syua network-manager-applet
