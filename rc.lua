@@ -39,8 +39,8 @@ awful.spawn.with_shell("$HOME/dev/helpful_scripts/autostart.sh")
 
 -- Setup laptop screen
 if "titanroam" == io.popen("uname -n"):read() then
-    awful.spawn.with_shell("xrandr --output eDP1 --mode 1920x1080 --output DP1 --mode 1920x1080 --right-of eDP1 --primary")
-    -- awful.spawn.with_shell("xrdb -merge <(echo \"Xft.dpi: 124\")")
+    -- awful.spawn.with_shell("nvidia-settings -a [gpu:0]/GPUPowerMizerMode=1") -- load the gpu performance profile saved in home
+    awful.spawn.with_shell("xrandr --output eDP1 --mode 1920x1080 --output HDMI2 --mode 1920x1080 --right-of eDP1 --primary")
     awful.spawn.with_shell("xinput --set-prop \"SYN1B7E:01 06CB:2970 Touchpad\" \"Synaptics Two-Finger Scrolling\" 1 1")
 end
 
