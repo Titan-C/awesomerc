@@ -44,6 +44,10 @@ if "titanroam" == io.popen("uname -n"):read() then
     awful.spawn.with_shell("xinput --set-prop \"SYN1B7E:01 06CB:2970 Touchpad\" \"Synaptics Two-Finger Scrolling\" 1 1")
 end
 
+if "klappschuh" == io.popen("uname -n"):read() then
+    awful.spawn.with_shell("xrandr --output DP-1 --output LVDS-1 --off")
+end
+
 -- {{{ Variable definitions
 
 -- This is used later as the default terminal and editor to run.
@@ -209,8 +213,8 @@ local globalkeys = awful.util.table.join(
         end,
         {description = "focus previous by index", group = "client"}
     ),
-    awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
-              {description = "show main menu", group = "awesome"}),
+    -- awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
+    -- {description = "show main menu", group = "awesome"}),
 
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "t", function () awful.client.swap.byidx(  1)    end,
@@ -345,8 +349,8 @@ local clientkeys = awful.util.table.join(
               {description = "move to master", group = "client"}),
     awful.key({ modkey,           }, "o",      function (c) c:move_to_screen()               end,
               {description = "move to screen", group = "client"}),
-    awful.key({ modkey,           }, "p",      function (c) c.ontop = not c.ontop            end,
-              {description = "toggle keep on top", group = "client"}),
+    -- awful.key({ modkey,           }, "p",      function (c) c.ontop = not c.ontop            end,
+    -- {description = "toggle keep on top", group = "client"}),
     awful.key({ modkey,           }, "d",
         function (c)
             -- The client currently has the input focus, so it cannot be
