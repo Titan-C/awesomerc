@@ -7,7 +7,12 @@ local wibox = require("wibox")
 local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
+local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
+
+-- Load Debian menu entries
+local debian = require("debian.menu")
+local has_fdo, freedesktop = pcall(require, "freedesktop")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -53,6 +58,8 @@ if "klappbier" == io.popen("uname -n"):read() then
 end
 
 -- {{{ Variable definitions
+-- Themes define colours, icons, font and wallpapers.
+beautiful.init(awful.util.getdir("config") .. "/zenburn/theme.lua")
 
 -- This is used later as the default software to run
 local tools = {
@@ -124,11 +131,29 @@ local myawesomemenu = {
    { "quit", function() awesome.quit() end}
 }
 
-local mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                   { "open terminal", tools.terminal } } })
+local menu_awesome = { "awesome", myawesomemenu, beautiful.awesome_icon }
+local menu_terminal = { "open terminal", tools.terminal }
+
+if has_fdo then
+    mymainmenu = freedesktop.menu.build({
+        before = { menu_awesome },
+        after =  { menu_terminal }
+    })
+else
+    mymainmenu = awful.menu({
+        items = {
+                  menu_awesome,
+                  { "Debian", debian.menu.Debian_menu.Debian },
+                  menu_terminal,
+                }
+    })
+end
 
 local mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                            menu = mymainmenu })
+
+-- Menubar configuration
+menubar.utils.terminal = tools.terminal -- Set the terminal for applications that require it
 
 -- }}}
 
@@ -177,9 +202,6 @@ awful.util.tasklist_buttons = awful.util.table.join(
     awful.button({ }, 5, function ()
                              awful.client.focus.byidx(-1)
                          end))
-
--- Themes define colours, icons, font and wallpapers.
-beautiful.init(awful.util.getdir("config") .. "/zenburn/theme.lua")
 
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", beautiful.set_wallpaper)
