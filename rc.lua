@@ -48,9 +48,13 @@ if "klappschuh" == io.popen("uname -n"):read() then
     awful.spawn.with_shell("xrandr --output DP-1 --output LVDS-1 --off")
 end
 
+if "klappbier" == io.popen("uname -n"):read() then
+    awful.spawn.with_shell("xrandr --output DP-2-2 --output DP-1-2 --right-of DP-2-2 --output eDP-1 --off")
+end
+
 -- {{{ Variable definitions
 
--- This is used later as the default terminal and editor to run.
+-- This is used later as the default software to run
 local tools = {
    terminal = "termite",
    editor = os.getenv("EDITOR") or "nvim",
@@ -62,10 +66,11 @@ local tools = {
    pass = "passmenu",
 }
 
-if "theo-fl-7113" == io.popen("uname -n"):read() then
-tools.browser_ch = tools.browser_ch .. " --proxy-pac-url=http://proxy.scd.u-psud.fr:8000/proxy.pac"
+if "klappbier" == io.popen("uname -n"):read() then
+    tools.terminal = "mate-terminal"
+    tools.filemanager = "caja"
+    tools.pass = "/usr/share/doc/pass/examples/dmenu/passmenu"
 end
-
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
