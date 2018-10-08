@@ -41,19 +41,20 @@ end
 
 -- Autostart script for keymaps
 awful.spawn.with_shell("$HOME/dev/helpful_scripts/autostart.sh")
+local hostname = io.popen("uname -n"):read()
 
 -- Setup laptop screen
-if "titanroam" == io.popen("uname -n"):read() then
+if "titanroam" == hostname then
     -- awful.spawn.with_shell("nvidia-settings -a [gpu:0]/GPUPowerMizerMode=1") -- load the gpu performance profile saved in home
     awful.spawn.with_shell("xrandr --output eDP1 --mode 1920x1080 --output HDMI2 --mode 1920x1080 --right-of eDP1 --primary")
     awful.spawn.with_shell("xinput --set-prop \"SYN1B7E:01 06CB:2970 Touchpad\" \"Synaptics Two-Finger Scrolling\" 1 1")
 end
 
-if "klappschuh" == io.popen("uname -n"):read() then
+if "klappschuh" == hostname then
     awful.spawn.with_shell("xrandr --output DP-1 --output LVDS-1 --off")
 end
 
-if "klappbier" == io.popen("uname -n"):read() then
+if "klappbier" == hostname then
     awful.spawn.with_shell("xrandr --output DP-2-2 --output DP-1-2 --right-of DP-2-2 --output eDP-1 --off")
 end
 
@@ -73,7 +74,7 @@ local tools = {
    pass = "passmenu",
 }
 
-if "klappbier" == io.popen("uname -n"):read() then
+if "klappbier" == hostname then
     tools.terminal = "mate-terminal"
     tools.filemanager = "caja"
     tools.pass = "/usr/share/doc/pass/examples/dmenu/passmenu"
@@ -594,6 +595,6 @@ run_once("xscreensaver -no-splash")
 run_once("mpd")
 run_once("redshift-gtk")
 
-if "titanroam" == io.popen("uname -n"):read() then
+if "titanroam" == hostname or "klappbier" == hostname then
 run_once("nm-applet")
 end
