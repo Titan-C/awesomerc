@@ -178,9 +178,15 @@ theme.mpd = lain.widget.mpd({
 })
 
 -- Battery
+-- local batteries
+local lbat = "BAT0"
+if "titanroam" == io.popen("uname -n"):read() then
+   lbat = "BAT1"
+end
+
 local baticon = wibox.widget.imagebox(theme.widget_battery)
 local batwidget = lain.widget.bat({
-    battery = "BAT1",
+    battery = lbat,
     ac = "ACAD",
     settings = function()
         if bat_now.status ~= "N/A" then

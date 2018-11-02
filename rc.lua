@@ -50,10 +50,6 @@ if "titanroam" == hostname then
     awful.spawn.with_shell("xinput --set-prop \"SYN1B7E:01 06CB:2970 Touchpad\" \"Synaptics Two-Finger Scrolling\" 1 1")
 end
 
-if "klappschuh" == hostname then
-    awful.spawn.with_shell("xrandr --output DP-1 --output LVDS-1 --off")
-end
-
 if "klappbier" == hostname then
     awful.spawn.with_shell("xrandr --output DP-2-2 --output DP-1-2 --right-of DP-2-2 --output eDP-1 --off")
 end
