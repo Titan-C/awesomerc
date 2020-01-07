@@ -39,8 +39,6 @@ do
 end
 -- }}}
 
--- Autostart script for keymaps
-awful.spawn.with_shell("$HOME/dev/helpful_scripts/autostart.sh")
 local hostname = io.popen("uname -n"):read()
 
 -- Setup laptop screen
@@ -51,7 +49,7 @@ if "titanroam" == hostname then
 end
 
 if "klappbier" == hostname then
-    awful.spawn.with_shell("xrandr --output DP-2-2 --output DP-1-2 --right-of DP-2-2 --output eDP-1 --off")
+    awful.spawn.with_shell("xrandr --output DP-2-1 --off --output DP-2-2 --mode 2560x1440 --pos 2560x0 --rotate normal --output DP-2-3 --off --output eDP-1 --primary --mode 1920x1080 --pos 1584x1440 --rotate normal --output DP-1-2 --mode 2560x1440 --pos 0x0 --rotate normal --output HDMI-2 --off --output HDMI-1 --off --output DP-1 --off --output DP-1-3 --off --output DP-2 --off --output DP-1-1 --off")
 end
 
 -- {{{ Variable definitions
@@ -254,6 +252,8 @@ local globalkeys = awful.util.table.join(
               {description = "Focus to first screen", group = "screen"}),
     awful.key({modkey,            }, "F2",     function () awful.screen.focus(2) end,
               {description = "Focus to second screen", group = "screen"}),
+    awful.key({modkey,            }, "F3",     function () awful.screen.focus(3) end,
+              {description = "Focus to third screen", group = "screen"}),
 
 
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
@@ -581,10 +581,10 @@ local function run_once(cmd)
   awful.spawn.with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
 end
 
-run_once("owncloud")
 run_once("dropbox")
 run_once("syncthing -no-browser")
 run_once("compton")
+run_once("nextcloud")
 -- run_once("megasync")
 -- run_once("conky -q -d -c /home/oscar/dev/conky-seamod/conkyrc.lua")
 run_once("xscreensaver -no-splash")
@@ -594,3 +594,6 @@ run_once("redshift-gtk")
 if "titanroam" == hostname or "klappbier" == hostname then
 run_once("nm-applet")
 end
+
+-- Autostart script for keymaps
+awful.spawn.with_shell("$HOME/dev/helpful_scripts/autostart.sh")
