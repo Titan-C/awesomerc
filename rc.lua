@@ -44,7 +44,7 @@ local hostname = io.popen("uname -n"):read()
 -- Setup laptop screen
 if "titanroam" == hostname then
     -- awful.spawn.with_shell("nvidia-settings -a [gpu:0]/GPUPowerMizerMode=1") -- load the gpu performance profile saved in home
-    awful.spawn.with_shell("xrandr --output eDP1 --mode 1920x1080 --output HDMI2 --mode 1920x1080 --right-of eDP1 --primary")
+    awful.spawn.with_shell("xrandr --output eDP1 --mode 1920x1080 --output HDMI2 --mode 1920x1080 --left-of eDP1 --primary")
     awful.spawn.with_shell("xinput --set-prop \"SYN1B7E:01 06CB:2970 Touchpad\" \"Synaptics Two-Finger Scrolling\" 1 1")
 end
 
@@ -456,6 +456,7 @@ awful.rules.rules = {
     { rule = { },
       properties = { border_width = beautiful.border_width,
                      border_color = beautiful.border_normal,
+                     size_hints_honor = false, -- No gaps on terminals
                      focus = awful.client.focus.filter,
                      raise = true,
                      keys = clientkeys,
