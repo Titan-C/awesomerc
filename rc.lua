@@ -273,7 +273,11 @@ local globalkeys = awful.util.table.join(
               {description = "open a terminal", group = "launcher"}),
     awful.key({ modkey, "Control" }, "l", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
-    awful.key({ modkey, "Shift"   }, "q", awesome.quit,
+    awful.key({ modkey, "Shift"   }, "q",
+               function ()
+                   awful.spawn("gpg-connect-agent killagent /bye")
+                   awesome.quit()
+               end,
               {description = "quit awesome", group = "awesome"}),
     awful.key({ }, "XF86Sleep", function () awful.spawn("systemctl suspend") end,
               {description = "Sleep", group = "awesome"}),
