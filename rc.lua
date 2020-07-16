@@ -586,15 +586,10 @@ local function run_once(cmd)
   awful.spawn.with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
 end
 
-run_once("dropbox")
-run_once("syncthing -no-browser")
-run_once("compton")
 run_once("nextcloud")
--- run_once("megasync")
--- run_once("conky -q -d -c /home/oscar/dev/conky-seamod/conkyrc.lua")
 run_once("xscreensaver -no-splash")
-run_once("mpd")
 run_once("redshift-gtk")
+run_once("mount /media/backup")
 
 if "titanroam" == hostname or "klappbier" == hostname then
 run_once("nm-applet")
