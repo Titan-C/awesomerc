@@ -51,7 +51,7 @@ elseif "klappbier" == hostname then
     awful.spawn.with_shell("xrandr --output eDP-1 --mode 1920x1080 --pos 0x1080 --rotate normal --output DP-1-3 --mode 1920x1080 --pos 0x0 --rotate normal --output DP-1-1 --primary --mode 2560x1440 --pos 1920x0 --rotate normal")
 
 elseif "archlive" == hostname then
-    awful.span.with_shell("xrandr --output eDP1 --mode 1920x1080 --pos 0x1080 --rotate normal --output DP1-1 --primary --mode 2560x1440 --pos 1920x0 --rotate normal --output DP1-3 --mode 1920x1080 --pos 0x0 --rotate normal")
+    awful.spawn.with_shell("xrandr --output eDP1 --mode 1920x1080 --pos 0x1080 --rotate normal --output DP1-1 --primary --mode 2560x1440 --pos 1920x0 --rotate normal --output DP1-3 --mode 1920x1080 --pos 0x0 --rotate normal")
 end
 
 -- {{{ Variable definitions
@@ -592,10 +592,7 @@ run_once("nextcloud")
 run_once("xscreensaver -no-splash")
 run_once("redshift-gtk")
 run_once("mount /media/backup")
-
-if "titanroam" == hostname or "klappbier" == hostname then
 run_once("nm-applet")
-end
 
 -- Autostart script for keymaps
 awful.spawn.with_shell("$HOME/dev/helpful_scripts/autostart.sh")
