@@ -46,10 +46,12 @@ if "titanroam" == hostname then
     -- awful.spawn.with_shell("nvidia-settings -a [gpu:0]/GPUPowerMizerMode=1") -- load the gpu performance profile saved in home
     awful.spawn.with_shell("xrandr --output eDP1 --mode 1920x1080 --output HDMI2 --mode 1920x1080 --left-of eDP1 --primary")
     awful.spawn.with_shell("xinput --set-prop \"SYN1B7E:01 06CB:2970 Touchpad\" \"Synaptics Two-Finger Scrolling\" 1 1")
-end
 
-if "klappbier" == hostname then
+elseif "klappbier" == hostname then
     awful.spawn.with_shell("xrandr --output eDP-1 --mode 1920x1080 --pos 0x1080 --rotate normal --output DP-1-3 --mode 1920x1080 --pos 0x0 --rotate normal --output DP-1-1 --primary --mode 2560x1440 --pos 1920x0 --rotate normal")
+
+elseif "archlive" == hostname then
+    awful.span.with_shell("xrandr --output eDP1 --mode 1920x1080 --pos 0x1080 --rotate normal --output DP1-1 --primary --mode 2560x1440 --pos 1920x0 --rotate normal --output DP1-3 --mode 1920x1080 --pos 0x0 --rotate normal")
 end
 
 -- {{{ Variable definitions
