@@ -553,4 +553,4 @@ run_once("mount /media/backup")
 run_once("nm-applet")
 
 -- Autostart script for keymaps
-awful.spawn.with_shell("$HOME/dev/helpful_scripts/autostart.sh")
+awful.spawn.with_shell("setxkbmap -I~/.config/xkb/ oscar -option caps:escape  -print | xkbcomp -I$HOME/.config/xkb/ - $DISPLAY")
