@@ -10,10 +10,6 @@ local naughty = require("naughty")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
 
--- Load Debian menu entries
-local debian = require("debian.menu")
-local has_fdo, freedesktop = pcall(require, "freedesktop")
-
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -119,41 +115,6 @@ local function client_menu_toggle_fn()
 end
 -- }}}
 
--- {{{ Menu
--- Create a launcher widget and a main menu
-local myawesomemenu = {
-   { "hotkeys", function() return false, hotkeys_popup.show_help end},
-   { "manual", tools.terminal .. " -e man awesome" },
-   { "restart", awesome.restart },
-   { "quit", function() awesome.quit() end}
-}
-
-local menu_awesome = { "awesome", myawesomemenu, beautiful.awesome_icon }
-local menu_terminal = { "open terminal", tools.terminal }
-
-if has_fdo then
-    mymainmenu = freedesktop.menu.build({
-        before = { menu_awesome },
-        after =  { menu_terminal }
-    })
-else
-    mymainmenu = awful.menu({
-        items = {
-                  menu_awesome,
-                  { "Debian", debian.menu.Debian_menu.Debian },
-                  menu_terminal,
-                }
-    })
-end
-
-local mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
-                                           menu = mymainmenu })
-
--- Menubar configuration
-menubar.utils.terminal = tools.terminal -- Set the terminal for applications that require it
-
--- }}}
-
 -- {{{ Wibar
 
 -- Create a wibox for each screen and add it
@@ -208,7 +169,6 @@ awful.screen.connect_for_each_screen(beautiful.at_screen_connect)
 
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
-    awful.button({ }, 3, function () mymainmenu:toggle() end),
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev)
 ))
@@ -237,8 +197,6 @@ local globalkeys = awful.util.table.join(
         end,
         {description = "focus previous by index", group = "client"}
     ),
-    -- awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
-    -- {description = "show main menu", group = "awesome"}),
 
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "t", function () awful.client.swap.byidx(  1)    end,
