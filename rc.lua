@@ -64,6 +64,7 @@ local tools = {
    filemanager = "thunar",
    video = "vlc",
    pass = "passmenu",
+   rofi_run = "rofi -show combi",
 }
 
 if "klappbier" == hostname then
@@ -307,7 +308,7 @@ local globalkeys = awful.util.table.join(
               {description = "Brightness Up", group = "screen"}),
 
     -- Prompt
-    awful.key({ modkey },            "l",     function () awful.screen.focused().mypromptbox:run() end,
+    awful.key({ modkey }, "l",   function () awful.spawn(tools.rofi_run) end,
               {description = "run prompt", group = "launcher"}),
 
     awful.key({ modkey }, "x",
