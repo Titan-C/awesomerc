@@ -65,6 +65,7 @@ local tools = {
    video = "vlc",
    pass = "passmenu",
    rofi_run = "rofi -show combi",
+   habit = "/home/titan/dev/helpful_scripts/guile/habit.scm",
 }
 
 if "klappbier" == hostname then
@@ -310,6 +311,8 @@ local globalkeys = awful.util.table.join(
     -- Prompt
     awful.key({ modkey }, "l",   function () awful.spawn(tools.rofi_run) end,
               {description = "run prompt", group = "launcher"}),
+    awful.key({ modkey }, "a",   function () awful.spawn(tools.habit) end,
+              {description = "capture habit", group = "launcher"}),
 
     awful.key({ modkey }, "x",
               function ()
